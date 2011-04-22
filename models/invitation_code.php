@@ -49,6 +49,37 @@ Class InvitationCode extends InvitationAppModel {
 		
 	}
 	
+	/**
+	 * Searches for a code and uses up one
+	 *
+	 * @param string $code 
+	 * @return bool
+	 * @author Rui Cruz
+	 */
+	public function lookup($code) {
+		
+		$record = $this->findByCode(INVITATION_CODE);
+		
+		if (!$record) {
+			
+			return false;
+			
+		} elseif ($record['InvitationCode']['amount'] == 0) {
+			
+			return false;
+			
+		} else {
+		
+			$this->id = $record['InvitationCode']['id'];
+			$this->saveField('amount', $record['InvitationCode']['amount']-1);
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
 }
 
 ?>
